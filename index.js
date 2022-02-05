@@ -57,7 +57,10 @@ async function scrapAndTwit() {
   console.log("___________________");
   console.log(hour + ":" + minutes);
 
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   await page.goto("https://looksrare.org", { waitUntil: "networkidle2" });
