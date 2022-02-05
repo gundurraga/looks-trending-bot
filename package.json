@@ -9,8 +9,7 @@
     "twitter-api-v2": "^1.10.0"
   },
   "scripts": {
-    "start": "node bot.js",
-    "dev": "nodemon bot.js"
+    "start": "node index.js"
   },
   "keywords": [],
   "author": "",
