@@ -22,13 +22,12 @@ const client = new TwitterApi({
   accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
+let fileName = "";
 let lastCollection = "";
 let collectionRepetition = 1;
 
-async function twit(collection, nft, priceText, price) {
-  const image = "nft-img.webp";
-
-  const mediaId = await client.v1.uploadMedia(image);
+async function twit(collection, nft, priceText, price, fileName) {
+  const mediaId = await client.v1.uploadMedia(fileName);
 
   let displayPrice = "";
 
@@ -92,7 +91,8 @@ async function scrapAndTwit() {
       console.log("Price not available.");
     }
 
-    const imgURL = document.querySelector(
+    //check whats up when is not img
+    const fileURL = document.querySelector(
       'div[class="css-11c5cw0"] > span > img'
     ).src;
 
@@ -101,7 +101,7 @@ async function scrapAndTwit() {
       nft,
       priceText,
       price,
-      imgURL,
+      fileURL,
     };
   });
 
@@ -115,10 +115,16 @@ async function scrapAndTwit() {
 
     return;
   } else {
-    await Downloader.download(data.imgURL);
+    const fileName = await Downloader.download(data.fileURL);
 
     setTimeout(async () => {
-      await twit(data.collection, data.nft, data.priceText, data.price);
+      await twit(
+        data.collection,
+        data.nft,
+        data.priceText,
+        data.price,
+        fileName
+      );
     }, 5000);
 
     collectionRepetition = 1;
