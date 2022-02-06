@@ -1,7 +1,8 @@
 //TODO
 //like twit
 //reply tweet wit nft url
-//support svg ?
+//support video
+//support svg
 
 const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
@@ -20,6 +21,7 @@ const client = new TwitterApi({
 });
 
 let lastCollection = "";
+let collectionRepetition = 1;
 
 async function twit(collection, nft, priceText, price) {
   const image = "nft-img.webp";
@@ -106,8 +108,12 @@ async function scrapAndTwit() {
 
   await browser.close();
 
-  if (lastCollection === data.collection) {
-    console.log("Trending NFT Collection is the same: ", data.collection);
+  if (lastCollection === data.collection && collectionRepetition % 20 !== 0) {
+    collectionRepetition++;
+    console.log(
+      `Trending NFT collection is the same: ${data.collection}. Repeated ${collectionRepetition} times.`
+    );
+
     return;
   } else {
     await Downloader.download(data.imgURL);
@@ -115,6 +121,8 @@ async function scrapAndTwit() {
     setTimeout(async () => {
       await twit(data.collection, data.nft, data.priceText, data.price);
     }, 5000);
+
+    collectionRepetition = 1;
   }
 
   lastCollection = data.collection;
