@@ -1,7 +1,7 @@
 //TODO
 //like twit
-//subir heroku
-//support svg
+//reply tweet wit nft url
+//support svg ?
 
 const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
@@ -54,7 +54,7 @@ async function scrapAndTwit() {
   if (minutes < 10) {
     minutes = "0" + minutes;
   }
-  console.log("___________________");
+  console.log("-----------------------------------------------------");
   console.log(hour + ":" + minutes);
 
   const browser = await puppeteer.launch({
@@ -107,7 +107,7 @@ async function scrapAndTwit() {
   await browser.close();
 
   if (lastCollection === data.collection) {
-    console.log("NFT Collection is the same: ", data.collection);
+    console.log("Trending NFT Collection is the same: ", data.collection);
     return;
   } else {
     await Downloader.download(data.imgURL);
