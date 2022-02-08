@@ -1,27 +1,25 @@
 const https = require("https");
 const fs = require("fs");
 
-async function download(url) {
-  var fileName = "file.png";
+async function download(url, cb) {
   const req = https.get(url, async function (res) {
-    fileName = "file." + (await res.headers["content-type"].split("/")[1]);
+    const fileName =
+      "file." + (await res.headers["content-type"].split("/")[1]);
     const fileStream = await fs.createWriteStream(fileName);
     res.pipe(fileStream);
 
     fileStream.on("error", function (error) {
-      console.log("Error writing to the stream.");
-      console.log(error);
+      console.log("Error writing to the stream.", error);
     });
-    fileStream.on("finish", async function () {
+    fileStream.on("finish", function () {
       fileStream.close();
-      console.log(`Successfully download ${fileName}`);
+      console.log(`Successfully downloaded ${fileName}`);
+      cb(fileName);
     });
   });
   req.on("error", function (error) {
-    console.log("Error downloading the file.");
-    console.log(error);
+    console.log("Error downloading the file.", error);
   });
-  return fileName;
 }
 
 module.exports.download = download;

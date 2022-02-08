@@ -115,17 +115,9 @@ async function scrapAndTwit() {
 
     return;
   } else {
-    const fileName = await Downloader.download(data.fileURL);
-
-    setTimeout(async () => {
-      await twit(
-        data.collection,
-        data.nft,
-        data.priceText,
-        data.price,
-        fileName
-      );
-    }, 5000);
+    Downloader.download(data.fileURL, (fileName) => {
+      twit(data.collection, data.nft, data.priceText, data.price, fileName);
+    });
 
     collectionRepetition = 1;
   }
