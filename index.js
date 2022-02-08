@@ -1,5 +1,5 @@
 //TODO
-//like twits
+//CLEAN CODE
 
 const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
@@ -35,7 +35,10 @@ async function twit(collection, nft, priceText, price, listingURL, fileName) {
       media_ids: mediaId,
     })
     .then((val) => {
-      client.v1.reply(listingURL, val.id_str);
+      client.v1
+        .reply(listingURL, val.id_str)
+        .then((val) => client.v2.like(val.user.id_str, val.id_str));
+      client.v2.like(val.user.id_str, val.id_str);
       console.log("Twitted " + nft + " successfully.");
     })
     .catch((err) => {
