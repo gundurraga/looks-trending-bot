@@ -1,10 +1,5 @@
 //TODO
-//like twit
-//reply tweet with nft url
-//support video
-//support svg
-//tag collection twitter
-//error: 'File size exceeds 5242880 bytes.'
+//like twits
 
 const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
@@ -26,7 +21,7 @@ let fileName = "";
 let lastCollection = "";
 let collectionRepetition = 1;
 
-async function twit(collection, nft, priceText, price, fileName) {
+async function twit(collection, nft, priceText, price, listingURL, fileName) {
   const mediaId = await client.v1.uploadMedia(fileName);
 
   let displayPrice = "";
@@ -35,12 +30,12 @@ async function twit(collection, nft, priceText, price, fileName) {
     displayPrice = "\n" + priceText + ": ♦️" + price;
   }
 
-  const newTweet = await client.v1
+  await client.v1
     .tweet(collection + "\n" + nft + displayPrice + "\n#NFT #NFTCommunity", {
       media_ids: mediaId,
     })
     .then((val) => {
-      // console.log(val);
+      client.v1.reply(listingURL, val.id_str);
       console.log("Twitted " + nft + " successfully.");
     })
     .catch((err) => {
@@ -69,10 +64,13 @@ async function scrapAndTwit() {
     let nft;
     let priceText;
     let price;
+    let fileURL;
+    let listingURL;
 
     collection = document.querySelector(
       'div[class="chakra-text css-1jjgvn4"]'
     ).innerText;
+
     nft = document.querySelector(
       'div[class="chakra-text css-6vo5mn"]'
     ).innerText;
@@ -91,10 +89,11 @@ async function scrapAndTwit() {
       console.log("Price not available.");
     }
 
-    //check whats up when is not img
-    const fileURL = document.querySelector(
+    fileURL = document.querySelector(
       'div[class="css-11c5cw0"] > span > img'
     ).src;
+
+    listingURL = document.querySelector('div[class="css-1mx3pyi"] > a').href;
 
     return {
       collection,
@@ -102,6 +101,7 @@ async function scrapAndTwit() {
       priceText,
       price,
       fileURL,
+      listingURL,
     };
   });
 
@@ -112,16 +112,20 @@ async function scrapAndTwit() {
     console.log(
       `Trending NFT collection is the same: ${data.collection}. Repeated ${collectionRepetition} times.`
     );
-
     return;
   } else {
     Downloader.download(data.fileURL, (fileName) => {
-      twit(data.collection, data.nft, data.priceText, data.price, fileName);
+      twit(
+        data.collection,
+        data.nft,
+        data.priceText,
+        data.price,
+        data.listingURL,
+        fileName
+      );
     });
-
     collectionRepetition = 1;
   }
-
   lastCollection = data.collection;
 }
 
