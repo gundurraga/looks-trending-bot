@@ -53,11 +53,11 @@ async function scrapAndTwit() {
   console.log(hour + ":" + minutes);
 
   try {
-    const browser = await puppeteer.launch({
+    browser = await puppeteer.launch({
       headless: true,
       args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-    const page = await browser.newPage();
+    page = await browser.newPage();
   } catch (e) {
     console.log("Error initialization puppeteer:", err);
     return;
