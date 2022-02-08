@@ -1,14 +1,12 @@
 //TODO
 //CLEAN CODE
-
 const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
+const { TwitterApi } = require("twitter-api-v2");
 
 const Downloader = require("./Downloader");
 
 dotenv.config({ path: "./config.env" });
-
-const { TwitterApi } = require("twitter-api-v2");
 
 const client = new TwitterApi({
   appKey: process.env.TWITTER_API_KEY,
@@ -17,7 +15,6 @@ const client = new TwitterApi({
   accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
-let fileName = "";
 let lastCollection = "";
 let collectionRepetition = 1;
 
@@ -55,58 +52,68 @@ async function scrapAndTwit() {
   console.log("-----------------------------------------------------");
   console.log(hour + ":" + minutes);
 
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-  const page = await browser.newPage();
+  try {
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
+    });
+    const page = await browser.newPage();
+  } catch (e) {
+    console.log("Error initialization puppeteer:", err);
+    return;
+  }
 
   await page.goto("https://looksrare.org", { waitUntil: "networkidle2" });
-  let data = await page.evaluate(() => {
-    let collection;
-    let nft;
-    let priceText;
-    let price;
-    let fileURL;
-    let listingURL;
+  let data = await page
+    .evaluate(() => {
+      let collection;
+      let nft;
+      let priceText;
+      let price;
+      let fileURL;
+      let listingURL;
 
-    collection = document.querySelector(
-      'div[class="chakra-text css-1jjgvn4"]'
-    ).innerText;
-
-    nft = document.querySelector(
-      'div[class="chakra-text css-6vo5mn"]'
-    ).innerText;
-
-    if (document.querySelector('div[class="chakra-text css-kw8lkc"]')) {
-      priceText = document.querySelector(
-        'div[class="chakra-text css-kw8lkc"]'
+      collection = document.querySelector(
+        'div[class="chakra-text css-1jjgvn4"]'
       ).innerText;
-    }
 
-    if (document.querySelector('div[class="chakra-text css-1byqfbw"]')) {
-      price = document.querySelector(
-        'div[class="chakra-text css-1byqfbw"]'
+      nft = document.querySelector(
+        'div[class="chakra-text css-6vo5mn"]'
       ).innerText;
-    } else {
-      console.log("Price not available.");
-    }
 
-    fileURL = document.querySelector(
-      'div[class="css-11c5cw0"] > span > img'
-    ).src;
+      if (document.querySelector('div[class="chakra-text css-kw8lkc"]')) {
+        priceText = document.querySelector(
+          'div[class="chakra-text css-kw8lkc"]'
+        ).innerText;
+      }
 
-    listingURL = document.querySelector('div[class="css-1mx3pyi"] > a').href;
+      if (document.querySelector('div[class="chakra-text css-1byqfbw"]')) {
+        price = document.querySelector(
+          'div[class="chakra-text css-1byqfbw"]'
+        ).innerText;
+      } else {
+        console.log("Price not available.");
+      }
 
-    return {
-      collection,
-      nft,
-      priceText,
-      price,
-      fileURL,
-      listingURL,
-    };
-  });
+      fileURL = document.querySelector(
+        'div[class="css-11c5cw0"] > span > img'
+      ).src;
+
+      listingURL = document.querySelector('div[class="css-1mx3pyi"] > a').href;
+
+      return {
+        collection,
+        nft,
+        priceText,
+        price,
+        fileURL,
+        listingURL,
+      };
+    })
+    .catch((err) => {
+      console.log("Error goto:", err);
+      return;
+    });
 
   await browser.close();
 
