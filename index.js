@@ -128,6 +128,7 @@ async function scrapAndTwit() {
   } else {
     Downloader.download(data.fileURL, (fileName) => {
       if (fileName === "file.svg+xml") {
+        console.log("svg not supported yet.");
         return;
       }
 
