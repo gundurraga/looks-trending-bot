@@ -1,5 +1,7 @@
 //TODO
+//support svg
 //CLEAN CODE
+
 const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
 const { TwitterApi } = require("twitter-api-v2");
@@ -111,7 +113,7 @@ async function scrapAndTwit() {
       };
     })
     .catch((err) => {
-      console.log("Error goto:", err);
+      console.log("Error", err);
       return;
     });
 
@@ -125,6 +127,10 @@ async function scrapAndTwit() {
     return;
   } else {
     Downloader.download(data.fileURL, (fileName) => {
+      if (fileName === "file.svg+xml") {
+        return;
+      }
+
       twit(
         data.collection,
         data.nft,
