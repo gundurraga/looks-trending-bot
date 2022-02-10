@@ -17,8 +17,7 @@ const client = new TwitterApi({
   accessSecret: process.env.TWITTER_ACCESS_TOKEN_SECRET,
 });
 
-let lastCollection = "";
-let collectionRepetition = 1;
+let lastNFT = "";
 
 async function twit(collection, nft, priceText, price, listingURL, fileName) {
   const mediaId = await client.v1.uploadMedia(fileName);
@@ -119,11 +118,8 @@ async function scrapAndTwit() {
 
   await browser.close();
 
-  if (lastCollection === data.collection && collectionRepetition % 20 !== 0) {
-    collectionRepetition++;
-    console.log(
-      `Trending NFT collection is the same: ${data.collection}. Repeated ${collectionRepetition} times.`
-    );
+  if (lastNFT === data.nft) {
+    console.log(`Trending NFT is the same: ${data.nft}.`);
     return;
   } else {
     Downloader.download(data.fileURL, (fileName) => {
@@ -141,9 +137,8 @@ async function scrapAndTwit() {
         fileName
       );
     });
-    collectionRepetition = 1;
   }
-  lastCollection = data.collection;
+  lastNFT = data.nft;
 }
 
 scrapAndTwit();
