@@ -145,4 +145,4 @@ scrapAndTwit();
 
 setInterval(() => {
   scrapAndTwit();
-}, 540000); // 9 minutes
+}, 300000); // 5 minutes
