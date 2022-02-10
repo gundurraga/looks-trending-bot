@@ -69,7 +69,7 @@ async function scrapAndTwit() {
   await page
     .goto("https://looksrare.org", { waitUntil: "networkidle2" })
     .catch((err) => {
-      console.log("Error", err);
+      console.log("Error loading looksrare", err);
       return;
     });
   let data = await page
@@ -119,11 +119,15 @@ async function scrapAndTwit() {
       };
     })
     .catch((err) => {
-      console.log("Error", err);
+      console.log("Error evaluating website", err);
       return;
     });
 
   await browser.close();
+
+  if (!data) {
+    return;
+  }
 
   if (lastNFT === data.nft) {
     console.log(`Trending NFT is the same: ${data.nft}.`);

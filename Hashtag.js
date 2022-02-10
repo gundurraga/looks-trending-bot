@@ -2,8 +2,8 @@ function hashtags() {
   let hashtagsPossibilities = [
     "#NFT",
     "#NFTCommunity",
+    "#NFTCommunity",
     "@LooksRareNFT",
-    "#Trending",
     "$LOOKS",
     "#LooksRare",
   ];
