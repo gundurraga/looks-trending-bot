@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 const { TwitterApi } = require("twitter-api-v2");
 
 const Downloader = require("./Downloader");
+const Hashtag = require("./Hashtag");
 
 dotenv.config({ path: "./config.env" });
 
@@ -23,13 +24,14 @@ async function twit(collection, nft, priceText, price, listingURL, fileName) {
   const mediaId = await client.v1.uploadMedia(fileName);
 
   let displayPrice = "";
+  let hashtags = Hashtag.hashtags();
 
   if (priceText) {
     displayPrice = "\n" + priceText + ": ♦️" + price;
   }
 
   await client.v1
-    .tweet(collection + "\n" + nft + displayPrice + "\n#NFT #NFTCommunity", {
+    .tweet(collection + "\n" + nft + displayPrice + "\n" + hashtags, {
       media_ids: mediaId,
     })
     .then((val) => {
@@ -150,4 +152,4 @@ scrapAndTwit();
 
 setInterval(() => {
   scrapAndTwit();
-}, 300000); // 5 minutes
+}, 420000); // 7 minutes
