@@ -64,7 +64,12 @@ async function scrapAndTwit() {
     return;
   }
 
-  await page.goto("https://looksrare.org", { waitUntil: "networkidle2" });
+  await page
+    .goto("https://looksrare.org", { waitUntil: "networkidle2" })
+    .catch((err) => {
+      console.log("Error", err);
+      return;
+    });
   let data = await page
     .evaluate(() => {
       let collection;
