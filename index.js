@@ -103,9 +103,14 @@ async function scrapAndTwit() {
         console.log("Price not available.");
       }
 
-      fileURL = document.querySelector(
-        'div[class="css-11c5cw0"] > span > img'
-      ).src;
+      if (document.querySelector('div[class="css-11c5cw0"] > span > img').src) {
+        fileURL = document.querySelector(
+          'div[class="css-11c5cw0"] > span > img'
+        ).src;
+      } else {
+        console.log("image not available");
+        return;
+      }
 
       listingURL = document.querySelector('div[class="css-1mx3pyi"] > a').href;
 
