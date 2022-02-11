@@ -1,6 +1,7 @@
 //TODO
 //support svg
 //CLEAN CODE
+//fix twit looks info (puppeteer)
 
 const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
@@ -8,6 +9,7 @@ const { TwitterApi } = require("twitter-api-v2");
 
 const Downloader = require("./Downloader");
 const Hashtag = require("./Hashtag");
+const { getLooksData } = require("./GetLooksData");
 
 dotenv.config({ path: "./config.env" });
 
@@ -20,7 +22,14 @@ const client = new TwitterApi({
 
 let lastNFT = "";
 
-async function twit(collection, nft, priceText, price, listingURL, fileName) {
+async function twitNFT(
+  collection,
+  nft,
+  priceText,
+  price,
+  listingURL,
+  fileName
+) {
   const mediaId = await client.v1.uploadMedia(fileName);
 
   let displayPrice = "";
@@ -39,7 +48,6 @@ async function twit(collection, nft, priceText, price, listingURL, fileName) {
         .reply(listingURL, val.id_str)
         .then((val) => client.v2.like(val.user.id_str, val.id_str));
       client.v2.like(val.user.id_str, val.id_str);
-      console.log(val.user.id_str);
       console.log("Twitted " + nft + " successfully.");
     })
     .catch((err) => {
@@ -48,14 +56,50 @@ async function twit(collection, nft, priceText, price, listingURL, fileName) {
     });
 }
 
-async function scrapAndTwit() {
+async function twitLooks(price, marketCap, rank, apr) {
+  await client.v1
+    .tweet(
+      "$LOOKS: " +
+        price +
+        "\nMarket Cap: " +
+        marketCap +
+        " (" +
+        rank +
+        ") \n" +
+        apr
+    )
+    .then((val) => {
+      client.v2.like(val.user.id_str, val.id_str);
+      console.log("Twitted $LOOKS info successfully.");
+    })
+    .catch((err) => {
+      console.log(err);
+      return;
+    });
+}
+
+function logTime() {
   let hour = new Date().getHours();
   let minutes = new Date().getMinutes();
   if (minutes < 10) {
     minutes = "0" + minutes;
   }
-  console.log("-----------------------------------------------------");
   console.log(hour + ":" + minutes);
+}
+
+async function scrapAndTwitLooks() {
+  logTime();
+  let looksInfo = await getLooksData();
+  twitLooks(
+    looksInfo.lPrice,
+    looksInfo.lMarketCap,
+    looksInfo.lRank,
+    looksInfo.lAPR
+  );
+}
+
+async function scrapAndTwitNFT() {
+  logTime();
 
   try {
     browser = await puppeteer.launch({
@@ -147,7 +191,7 @@ async function scrapAndTwit() {
         return;
       }
 
-      twit(
+      twitNFT(
         data.collection,
         data.nft,
         data.priceText,
@@ -160,8 +204,15 @@ async function scrapAndTwit() {
   lastNFT = data.nft;
 }
 
-scrapAndTwit();
+let minute = 60000;
+
+scrapAndTwitLooks();
+scrapAndTwitNFT();
 
 setInterval(() => {
-  scrapAndTwit();
-}, 420000); // 7 minutes
+  scrapAndTwitLooks();
+}, 60 * minute);
+
+setInterval(() => {
+  scrapAndTwitNFT();
+}, 7 * minute);
