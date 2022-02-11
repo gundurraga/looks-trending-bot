@@ -6,6 +6,7 @@ function hashtags() {
     "@LooksRareNFT",
     "$LOOKS",
     "#LooksRare",
+    "#LooksRareTrends",
   ];
   let firstHashtag =
     hashtagsPossibilities[

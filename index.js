@@ -39,10 +39,12 @@ async function twit(collection, nft, priceText, price, listingURL, fileName) {
         .reply(listingURL, val.id_str)
         .then((val) => client.v2.like(val.user.id_str, val.id_str));
       client.v2.like(val.user.id_str, val.id_str);
+      console.log(val.user.id_str);
       console.log("Twitted " + nft + " successfully.");
     })
     .catch((err) => {
       console.log(err);
+      return;
     });
 }
 
@@ -103,7 +105,7 @@ async function scrapAndTwit() {
         console.log("Price not available.");
       }
 
-      if (document.querySelector('div[class="css-11c5cw0"] > span > img').src) {
+      if (document.querySelector('div[class="css-11c5cw0"] > span > img')) {
         fileURL = document.querySelector(
           'div[class="css-11c5cw0"] > span > img'
         ).src;
@@ -131,6 +133,7 @@ async function scrapAndTwit() {
   await browser.close();
 
   if (!data) {
+    console.log("No data available");
     return;
   }
 
