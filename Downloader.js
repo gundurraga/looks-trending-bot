@@ -5,6 +5,11 @@ async function download(url, cb) {
   const req = https.get(url, async function (res) {
     const fileName =
       "file." + (await res.headers["content-type"].split("/")[1]);
+
+    if (filename === "file.png") {
+      fileName = "file.webp";
+    }
+
     const fileStream = await fs.createWriteStream(fileName);
     res.pipe(fileStream);
 
