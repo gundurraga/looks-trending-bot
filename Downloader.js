@@ -6,7 +6,7 @@ async function download(url, cb) {
     const fileName =
       "file." + (await res.headers["content-type"].split("/")[1]);
 
-    if (filename === "file.png") {
+    if (fileName === "file.png") {
       fileName = "file.webp";
     }
 
