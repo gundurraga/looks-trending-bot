@@ -17,7 +17,6 @@ function hashtags() {
     ];
 
   while (firstHashtag === secondHashtag) {
-    console.log(firstHashtag, secondHashtag);
     secondHashtag =
       hashtagsPossibilities[
         Math.floor(Math.random() * hashtagsPossibilities.length)
