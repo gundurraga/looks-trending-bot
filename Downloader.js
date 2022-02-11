@@ -1,6 +1,5 @@
 const https = require("https");
 const fs = require("fs");
-const test = require("./test");
 
 async function download(url, cb) {
   const req = https.get(url, async function (res) {
@@ -22,8 +21,5 @@ async function download(url, cb) {
     console.log("Error downloading the file.", error);
   });
 }
-let fileName = "file.png";
-fileName = test.compress(fileName);
-console.log(fileName);
 
 module.exports.download = download;
