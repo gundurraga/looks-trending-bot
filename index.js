@@ -2,6 +2,7 @@
 //support svg
 //CLEAN CODE
 //fix twit looks info (puppeteer)
+//use coingecko api
 
 const puppeteer = require("puppeteer");
 const dotenv = require("dotenv");
