@@ -211,7 +211,7 @@ async function scrapAndTwitNFT() {
 let minute = 60000;
 
 scrapAndTwitLooks();
-// scrapAndTwitNFT();
+scrapAndTwitNFT();
 
 setInterval(() => {
   scrapAndTwitLooks();
