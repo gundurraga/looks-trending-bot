@@ -56,20 +56,17 @@ async function twitNFT(
     });
 }
 
-async function twitLooks(price, marketCap, rank, apr, dpr) {
+async function twitLooks(price, marketCap, rank, apr) {
   await client.v1
     .tweet(
-      "💎 $LOOKS " +
+      "$LOOKS: " +
         price +
-        "\n💎 Market Cap " +
+        "\nMarket Cap: " +
         marketCap +
         " (" +
         rank +
-        ") \n💎 APR " +
-        apr +
-        "% (DPR " +
-        dpr +
-        "%)"
+        ") \n" +
+        apr
     )
     .then((val) => {
       client.v2.like(val.user.id_str, val.id_str);
@@ -97,8 +94,7 @@ async function scrapAndTwitLooks() {
     looksInfo.lPrice,
     looksInfo.lMarketCap,
     looksInfo.lRank,
-    looksInfo.lAPR,
-    looksInfo.lDPR
+    looksInfo.lAPR
   );
 }
 
@@ -215,7 +211,7 @@ scrapAndTwitNFT();
 
 setInterval(() => {
   scrapAndTwitLooks();
-}, 180 * minute);
+}, 60 * minute);
 
 setInterval(() => {
   scrapAndTwitNFT();
