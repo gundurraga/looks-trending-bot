@@ -7,6 +7,8 @@ function hashtags() {
     "$LOOKS",
     "#LooksRare",
     "#LooksRareTrends",
+    "#NFTartist",
+    "#NFTart",
   ];
   let firstHashtag =
     hashtagsPossibilities[

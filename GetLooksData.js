@@ -76,12 +76,19 @@ async function getLooksData() {
 
   await browser2.close();
 
+  let digits = looksAPR.apr.match(/\d+/g, "");
+  let apr = `${digits[0]}.${digits[1]}`;
+  let dpr = Math.round((apr * 100) / 365) / 100;
+
   let lPrice = looksData.looksPrice;
   let lMarketCap = looksData.marketCap;
   let lRank = looksData.rank;
-  let lAPR = looksAPR.apr;
+  let lAPR = apr;
+  let lDPR = dpr;
 
-  return { lPrice, lMarketCap, lRank, lAPR };
+  return { lPrice, lMarketCap, lRank, lAPR, lDPR };
 }
+
+getLooksData();
 
 module.exports.getLooksData = getLooksData;
