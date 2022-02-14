@@ -216,4 +216,4 @@ setInterval(() => {
 
 setInterval(() => {
   scrapAndTwitNFT();
-}, 7 * minute);
+}, 6 * minute);
