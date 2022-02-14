@@ -68,7 +68,7 @@ async function twitLooks(price, marketCap, rank, apr) {
         rank +
         ") \n" +
         apr +
-        "\n #NFTCommunity @LooksRareNFT"
+        "\n#NFTCommunity @LooksRareNFT"
     )
     .then((val) => {
       client.v2.like(val.user.id_str, val.id_str);
