@@ -67,7 +67,8 @@ async function twitLooks(price, marketCap, rank, apr) {
         " (" +
         rank +
         ") \n" +
-        apr
+        apr +
+        "\n #NFTCommunity @LooksRareNFT"
     )
     .then((val) => {
       client.v2.like(val.user.id_str, val.id_str);
@@ -216,4 +217,4 @@ setInterval(() => {
 
 setInterval(() => {
   scrapAndTwitNFT();
-}, 6 * minute);
+}, 5 * minute);
