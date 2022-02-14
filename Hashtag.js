@@ -5,6 +5,7 @@ function hashtags() {
     "#NFTCommunity",
     "#NFTCommunity",
     "@LooksRareNFT",
+    "@LooksRareNFT",
     "$LOOKS",
     "#LooksRare",
     "#LooksRareTrends",
